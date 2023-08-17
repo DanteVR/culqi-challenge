@@ -1,5 +1,6 @@
 import { CardDto } from '../dto/card.dto'
 import { CreateCardTokenResponse } from '../interfaces/create-card-token-response.interface'
+import { RetrieveCardTokenResponse } from '../interfaces/retrieve-card-token-response.interface'
 import TokenService from './token.service'
 
 describe('TokenService', () => {
@@ -21,17 +22,52 @@ describe('TokenService', () => {
 
   const service = new TokenService()
 
-  it('Validate if the card details are valid.', async () => {
-    const result: CreateCardTokenResponse = await service.create(validCard)
-    expect(typeof result).toBe('object')
-    expect(result).toHaveProperty('token')
+  describe('create', () => {
+    it('Validate if the card details are valid.', async () => {
+      const mock = jest.fn().mockReturnValue({
+        token: 'Km9kn7blbMayW0lc'
+      })
+
+      service.create = mock
+
+      const result: CreateCardTokenResponse = await service.create(validCard)
+      expect(mock).toHaveBeenCalledWith(validCard)
+      expect(typeof result).toBe('object')
+      expect(result).toHaveProperty('token')
+    })
+
+    it('Validate incorrect card data.', async () => {
+      try {
+        await service.create(invalidCard)
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toThrowError(/Invalid values, check the following fields/)
+      }
+    })
   })
 
-  it('Validate incorrect card data.', async () => {
-    try {
-      await service.create(invalidCard)
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-    }
+  describe('retrieve', () => {
+    it('Validate if the card details are valid.', async () => {
+      const token = 'Km9kn7blbMayW0lc'
+
+      const mock = jest.fn().mockReturnValue({
+        token: 'Km9kn7blbMayW0lc',
+        card: {
+          card_number: '4242424242424242',
+          expiration_month: '12',
+          expiration_year: '2028',
+          email: 'dantevilla006@gmail.com'
+        }
+      })
+
+      service.retrieve = mock
+
+      const result: RetrieveCardTokenResponse = await service.retrieve(token)
+      expect(mock).toHaveBeenCalledWith(token)
+      expect(typeof result).toBe('object')
+      expect(result).toHaveProperty('token')
+      expect(result).toHaveProperty('card')
+      expect(result.card).not.toHaveProperty('cvv')
+    })
   })
 })
