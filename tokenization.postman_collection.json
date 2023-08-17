@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "96beba40-9c02-4348-9647-cbca19c6281a",
+		"name": "Culqi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5635535"
+	},
+	"item": [
+		{
+			"name": "tokens",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pk_test_2JWw9meMXbq7hS1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"card_number\": \"4242424242424242\",\r\n    \"cvv\": \"123\",\r\n    \"expiration_month\": \"12\",\r\n    \"expiration_year\": \"2028\",\r\n    \"email\": \"dantevilla006@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/tokens",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tokens/{token}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pk_test_2JWw9meMXbq7hS1Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tokens/2JWw9meMXbq7hS1Y",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tokens",
+						"2JWw9meMXbq7hS1Y"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

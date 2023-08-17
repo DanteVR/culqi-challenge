@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  CreateCardTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/create-card-token.handler
+      Runtime: nodejs16.x
+      Description: Card tokenization.
+      Environment:
+        Variables:
+          REDIS_DB_HOST: 192.168.0.8
+          REDIS_DB_PORT: 6379
+          REDIS_TOKEN_EXPIRATION: 900
+          PG_DB_HOST: 192.168.0.8
+          PG_DB_PORT: 5432
+          PG_DB_USER: postgres
+          PG_DB_PASS: postgres
+          PG_DB_NAME: culqi_db
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /tokens
+            Method: post
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+  RetrieveCardTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/retrieve-card-token.handler
+      Runtime: nodejs16.x
+      Description: Obtain card data using a token.
+      Environment:
+        Variables:
+          REDIS_DB_HOST: 192.168.0.8
+          REDIS_DB_PORT: 6379
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /tokens/{token}
+            Method: GET
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
